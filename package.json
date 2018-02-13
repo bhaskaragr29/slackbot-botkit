@@ -1,0 +1,33 @@
+{
+  "name": "slackbot-spotify",
+  "version": "0.0.1",
+  "description": "Slackbot",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "botkit": "^0.6.9",
+    "debug": "^2.3.3",
+    "express": "^4.14.0",
+    "node-env-file": "^0.1.8",
+    "node-fetch": "^2.0.0"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/howdyai/botkit-starter-slack.git"
+  },
+  "bugs": {
+    "url": "https://github.com/howdyai/botkit-starter-slack/issues"
+  },
+  "homepage": "https://github.com/howdyai/botkit-starter-slack",
+  "keywords": [
+    "bots",
+    "chatbots",
+    "slack"
+  ],
+  "author": "bhaskar.agarwal@capgemini.com",
+  "license": "ISC"
+}
