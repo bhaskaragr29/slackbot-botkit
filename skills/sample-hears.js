@@ -3,8 +3,299 @@
 const commands = require('../lib/commands');
 const SLACK_SOCKET_SERVER = 'http://localhost:4200';
 const fetch = require('node-fetch');
+const utils = require('../utils/helper');
 
-
+const testButton = {
+    "text": "Welcome to SpotBot!",
+    "attachments": [
+      {
+        "fallback": "Hmm?",
+        "color": "#27d243",
+        "text": "Here are your options:",
+        "mrkdwn_in": [
+          "text",
+          "pretext",
+          "fields"
+        ],
+        "callback_id": "spotbot_options_callback",
+        "attachment_type": "default",
+        "actions": [
+          {
+            "name": "game",
+            "text": "Search for Songs / Artists",
+            "type": "button",
+            "style": "primary",
+            "value": "chess"
+          },
+          {
+            "name": "game",
+            "text": "Search for Playlists",
+            "type": "button",
+            "style": "primary",
+            "value": "maze"
+          },
+          {
+            "name": "Currently Playing",
+            "text": "Currently Playing",
+            "type": "button",
+            "style": "primary",
+            "value": "Currently Playing"
+          },
+          {
+            "name": "List",
+            "text": "List",
+            "type": "button",
+            "style": "primary",
+            "value": "List"
+          },
+          {
+            "name": "Recommended",
+            "text": "Recommended",
+            "type": "button",
+            "style": "primary",
+            "value": "Recommended"
+          }
+        ]
+      }
+    ]
+  };
+const testData1 = {
+    text: 'Welcome to SpotBot!',
+    attachments: [
+    {
+      text: 'Welcome to SpotBot!',
+      attachments: [
+        {
+          fallback: 'Hmm?',
+          color: '#27d243',
+          text: 'Here are your options:',
+          mrkdwn_in: [
+            'text',
+            'pretext',
+            'fields'
+          ],
+          callback_id: 'wopr_game',
+          attachment_type: 'default',
+          actions: [
+            {
+              name: 'game',
+              text: 'Search for Songs / Artists',
+              type: 'button',
+              style: 'primary',
+              value: 'chess'
+            },
+            {
+              name: 'game',
+              text: 'Search for Playlists',
+              type: 'button',
+              style: 'primary',
+              value: 'maze'
+            },
+            {
+              name: 'Currently Playing',
+              text: 'Currently Playing',
+              type: 'button',
+              style: 'primary',
+              value: 'Currently Playing'
+            },
+            {
+              name: 'List',
+              text: 'List',
+              type: 'button',
+              style: 'primary',
+              value: 'List'
+            },
+            {
+              name: 'Recommended',
+              text: 'Recommended',
+              type: 'button',
+              style: 'primary',
+              value: 'Recommended'
+            }
+          ]
+        }
+      ]
+    },
+    {
+      text: 'Select songs which you would like to add to the playlist',
+      attachments: [
+        {
+          fallback: 'You are unable to choose a game',
+          color: '#24db56',
+          mrkdwn_in: [
+            'text',
+            'pretext',
+            'fields'
+          ],
+          callback_id: 'wopr_game',
+          attachment_type: 'default',
+          actions: [
+            {
+              name: 'Search Results',
+              text: 'Search Results',
+              type: 'select',
+              value: 'Search Results',
+              data_source: 'static',
+              options: [
+                {
+                  text: 'Song 1',
+                  value: 'Song 1'
+                },
+                {
+                  text: 'Song 2',
+                  value: 'Song 2'
+                },
+                {
+                  text: 'Song 3',
+                  value: 'Song 3'
+                },
+                {
+                  text: 'Song 4',
+                  value: 'Song 4'
+                },
+                {
+                  text: 'Song 5',
+                  value: 'Song 5'
+                },
+                {
+                  text: 'Song 6',
+                  value: 'Song 6'
+                },
+                {
+                  text: 'Song 7',
+                  value: 'Song 7'
+                },
+                {
+                  text: 'Song 8',
+                  value: 'Song 8'
+                },
+                {
+                  text: 'Song 9',
+                  value: 'Song 9'
+                },
+                {
+                  text: 'Song 10',
+                  value: 'Song 10'
+                }
+              ]
+            },
+            {
+              name: 'Add to Playlist',
+              text: 'Add to Playlist',
+              type: 'button',
+              style: 'primary',
+              value: 'Add to Playlist'
+            },
+            {
+              name: 'Done!',
+              text: 'Done!',
+              type: 'button',
+              style: 'danger',
+              value: 'Done!'
+            }
+          ]
+        }
+      ]
+    },
+    {
+      text: 'Successfully added to the playlist!',
+      response_type: 'ephemeral'
+    },
+    {
+      text: 'Currently Playing: Song 1 :musical_note:',
+      attachments: [
+        {
+          fallback: 'Hmm?',
+          color: '#27d243',
+          mrkdwn_in: [
+            'text',
+            'pretext',
+            'fields'
+          ],
+          callback_id: 'wopr_game',
+          attachment_type: 'default',
+          title: 'Up Next: Song 2 :musical_note:',
+          actions: [
+            {
+              name: ':rewind:',
+              text: ':rewind:',
+              type: 'button',
+              style: 'default',
+              value: ':rewind:'
+            },
+            {
+              name: 'game',
+              text: ':arrow_forward:',
+              type: 'button',
+              style: 'primary',
+              value: 'maze'
+            },
+            {
+              name: ':double_vertical_bar:',
+              text: ':double_vertical_bar:',
+              type: 'button',
+              style: 'default',
+              value: ':double_vertical_bar:'
+            },
+            {
+              name: ':fast_forward:',
+              text: ':fast_forward:',
+              type: 'button',
+              style: 'default',
+              value: ':fast_forward:'
+            }
+          ]
+        }
+      ]
+    },
+    {
+      text: 'Here is your current list:',
+      attachments: [
+        {
+          fallback: 'Hmm?',
+          color: '#27d243',
+          mrkdwn_in: [
+            'text',
+            'pretext',
+            'fields'
+          ],
+          callback_id: 'wopr_game',
+          attachment_type: 'default',
+          actions: [
+            {
+              name: 'game',
+              text: 'Play',
+              type: 'button',
+              style: 'default',
+              value: 'chess'
+            },
+            {
+              name: 'Shuffle',
+              text: 'Shuffle',
+              type: 'button',
+              style: 'default',
+              value: 'Shuffle'
+            },
+            {
+              name: 'Repeat List',
+              text: 'Repeat List',
+              type: 'button',
+              style: 'default',
+              value: 'Repeat List'
+            },
+            {
+              name: 'Clear List',
+              text: 'Clear List',
+              type: 'button',
+              style: 'default',
+              value: 'Clear List'
+            }
+          ]
+        }
+      ]
+    }
+  ]
+};
 const testMenu = {
     "text": "Would you like to play a game?",
     "response_type": "in_channel",
@@ -58,48 +349,6 @@ const testMenu = {
 
 module.exports = function(controller) {
 
-    controller.on('interactive_message_callback', function(bot, message) {
-        // These 3 lines are used to parse out the id's
-        var ids = message.callback_id.split(/\-/);
-        var user_id = ids[0];
-        var item_id = ids[1];
-    
-        var callbackId = message.callback_id;
-        
-        // Example use of Select case method for evaluating the callback ID
-        // Callback ID 123 for weather bot webcam
-        switch(callbackId) {
-        case "123":
-            bot.replyInteractive(message, "Button works!");
-            break;
-        // Add more cases here to handle for multiple buttons    
-        default:
-            // For debugging
-            bot.reply(message, 'The callback ID has not been defined');
-        }
-    });
-
-    controller.on('interactive_message_callback', function(bot, message) {
-        // These 3 lines are used to parse out the id's
-        var ids = message.callback_id.split(/\-/);
-        var user_id = ids[0];
-        var item_id = ids[1];
-    
-        var callbackId = message.callback_id;
-        
-        // Example use of Select case method for evaluating the callback ID
-        // Callback ID 123 for weather bot webcam
-        switch(callbackId) {
-        case "123":
-            bot.replyInteractive(message, "Button works!");
-            break;
-        // Add more cases here to handle for multiple buttons    
-        default:
-            // For debugging
-            bot.reply(message, 'The callback ID has not been defined');
-        }
-    });
-
 
     controller.hears(['^hello$'], 'direct_message,direct_mention', function(bot, message) {
         const commands_list = [];
@@ -111,130 +360,9 @@ module.exports = function(controller) {
     });
 
     controller.hears(['^help (.*)$'], 'direct_mention', function(bot, message) {
-        // console.log(message);
-        // bot.reply(message,{
-        //     "attachments": [
-        //         {
-        //             "title": "Title",
-        //             "pretext": "Pretext _supports_ mrkdwn",
-        //             "text": "Testing *right now!*",
-        //             "mrkdwn_in": ["text", "pretext"]
-        //         }
-        //     ]
-        // })
         const commandMessage = message.match[1];
-        // console.log(commandMessage);   
-        // bot.startConversation(message, function(err, convo) {
-
-        //     convo.addMessage({text: 'hello', action:'foo'},'default');
-        
-        //     convo.addMessage({text: 'foo'},'foo');
-        
-        //     convo.beforeThread('foo', function(convo, next) {
-        
-        //       console.log('BEFORE FOO!');
-        //       next();
-        
-        //     });
-        
-        //     convo.beforeThread('foo', function(convo, next) {
-        
-        //       console.log('ALSO BEFORE FOO');
-        //       next();
-        
-        //     });
-        
-        
-        //     console.log('GO BAB GO');
-        
-        //   });
-
-        
-        // let user = {
-        //         id: message.user,
-        //         list: []
-        //     }
-        
-
-        // if (!user.list || !user.list.length) {
-        //     user.list = [
-        //         {
-        //             'id': 1,
-        //             'text': 'Test Item 1'
-        //         },
-        //         {
-        //             'id': 2,
-        //             'text': 'Test Item 2'
-        //         },
-        //         {
-        //             'id': 3,
-        //             'text': 'Test Item 3'
-        //         }
-        //     ]
-        // }
-
-        // var reply = {
-        //     text: 'Here is your list. Say `add <item>` to add items.',
-        //     attachments: [],
-        // }
-
-        // for (var x = 0; x < user.list.length; x++) {
-        //     reply.attachments.push({
-        //         title: user.list[x].text + (user.list[x].flagged? ' *FLAGGED*' : ''),
-        //         callback_id: message.user + '-' + user.list[x].id,
-        //         attachment_type: 'default',
-        //         actions: [
-        //             {
-        //                 "name":"flag",
-        //                 "text": ":waving_black_flag: Flag",
-        //                 "value": "flag",
-        //                 "type": "button",
-        //             },
-        //             {
-        //                "text": "Delete",
-        //                 "name": "delete",
-        //                 "value": "delete",
-        //                 "style": "danger",
-        //                 "type": "button",
-        //                 "confirm": {
-        //                   "title": "Are you sure?",
-        //                   "text": "This will do something!",
-        //                   "ok_text": "Yes",
-        //                   "dismiss_text": "No"
-        //                 }
-        //             }
-        //         ]
-        //     })
-        // }
-        // bot.reply(message, reply);
-
-        // var testButtonReply = {
-        //     username: 'Button Bot' ,
-        //     text: 'This is a test message with a button',
-        //     replace_original: 'true',
-        //     attachments: [
-        //         {
-        //             fallback: "fallback text",
-        //             callback_id: '123',
-        //             attachment_type: 'default',
-        //             title: 'message title',
-        //             text: 'message content',
-        //             color: '#0075C7',
-        //             actions: [
-        //                 {
-        //                   "name": "button name",
-        //                   "text": "button text",
-        //                   "type": "button",
-        //                   "value": "whatever you want to pass into the interactive_message_callback"}
-        //             ]
-        //         }
-        //     ],
-        //     icon_url: 'http://14379-presscdn-0-86.pagely.netdna-cdn.com/wp-content/uploads/2014/05/ButtonButton.jpg'
-            
-        // }
-
-        
-    bot.reply(message, testMenu); 
+       
+        bot.reply(message, testButton); 
 
         
     });
@@ -260,7 +388,7 @@ module.exports = function(controller) {
             .then(tracks => {
                 console.log(tracks);
                 tracks.forEach(track => {
-                    trackList.push(track.name);
+                    trackList.push(":musical_note:"+track.name);
                 });
                 const text = trackList.join("\n");
                 bot.reply(message, {text: text});
