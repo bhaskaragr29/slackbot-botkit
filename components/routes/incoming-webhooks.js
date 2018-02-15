@@ -1,25 +1,9 @@
 'use strict';
 
-const debug = require('debug')('botkit:incoming_webhooks');
+const debug = require('debug')('slackbotkit:incoming_webhooks');
 const fetch = require('node-fetch');
 const utils = require('../../utils/helper');
 
-const options_search  = {
-    options: [
-        {
-            text: "Unexpected sentience",
-            value: "AI-2323"
-        },
-        {
-            text: "Bot biased toward other bots",
-            value: "SUPPORT-42"
-        },
-        {
-            text: "Bot broke my toaster",
-            value: "IOT-75"
-        }
-    ]
-};
 
 /**
  * Incoming webhooks
@@ -61,16 +45,17 @@ module.exports = function(webserver, controller) {
         const payload = JSON.parse(req.body.payload);
         
         const data = {
-            "method": "album",
+            "method": "any",
             "text": payload.value
         };
         const trackList = [];
         fetchData("/search", data)
             .then(tracks => {
-                console.log(tracks);
                 tracks.forEach(track => {
                     const minutes = utils.millisToMinutesAndSeconds(track.length);
-                    trackList.push({text: `:musical_note: ${track.name} - ${minutes}`, value: `${track.name}::::${track.uri}`});
+                    debug(track);
+                    const value = `${track.name}::::${track.uri}::::${track.length}::::${track.track_no}`;
+                    trackList.push({text: `:musical_note: ${track.name} - ${minutes}`, value: value});
                 });
                 //const text = trackList.join("\n");
                 res.send(JSON.stringify({options: trackList}));
